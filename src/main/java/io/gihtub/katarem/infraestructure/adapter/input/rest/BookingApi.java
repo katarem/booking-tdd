@@ -1,8 +1,11 @@
 package io.gihtub.katarem.infraestructure.adapter.input.rest;
 
+import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
+import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapper;
 import jakarta.annotation.Nonnull;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.UUID;
 public class BookingApi {
 
     private final GetBookingUseCase getBookingUseCase;
+    private final CreateBookingUseCase createBookingUseCase;
     private final BookingRestMapper mapper;
 
     @GetMapping("/{bookingId}")
@@ -22,6 +26,14 @@ public class BookingApi {
     public GetBookingResponse getBooking(@PathVariable UUID bookingId) {
         var booking = getBookingUseCase.getBooking(bookingId);
         return mapper.toGetBookingResponse(booking);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CreateBookingResponse createBooking(@Valid @RequestBody BookingRequest request) {
+        var model = mapper.toDomain(request);
+        var booking = createBookingUseCase.createBooking(model);
+        return mapper.toCreateBookingResponse(booking);
     }
 
 }
