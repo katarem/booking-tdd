@@ -113,9 +113,9 @@ public class BookingTest {
         void booking_invalid_start_date_time_is_before_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(5), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(12), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(5);
+            ZonedDateTime start = now.withHour(5);
+            ZonedDateTime end = now.withHour(12);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -132,9 +132,9 @@ public class BookingTest {
         void booking_invalid_start_date_time_is_after_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(22), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(23), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(8);
+            ZonedDateTime start = now.withHour(22);
+            ZonedDateTime end = now.withHour(23);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -151,9 +151,9 @@ public class BookingTest {
         void booking_invalid_end_date_time_is_before_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(8);
+            ZonedDateTime start = now.withHour(8);
+            ZonedDateTime end = now.withHour(8);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -170,9 +170,9 @@ public class BookingTest {
         void booking_invalid_end_date_time_is_after_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(19), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(23), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(8);
+            ZonedDateTime start = now.withHour(19);
+            ZonedDateTime end = now.withHour(23);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -189,9 +189,9 @@ public class BookingTest {
         void booking_invalid_start_date_is_after_end_date(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(17), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(15), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(8);
+            ZonedDateTime start = now.withHour(17);
+            ZonedDateTime end = now.withHour(15);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -208,9 +208,9 @@ public class BookingTest {
         void booking_invalid_dates_difference_lower_than_30m(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(17).withMinute(0), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(17).withMinute(25), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(8);
+            ZonedDateTime start = now.withHour(17).withMinute(0);
+            ZonedDateTime end = now.withHour(17).withMinute(25);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -227,9 +227,9 @@ public class BookingTest {
         void booking_invalid_dates_difference_higher_than_8h(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(8).withMinute(0), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(16).withMinute(30), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(8);
+            ZonedDateTime start = now.withHour(8).withMinute(0);
+            ZonedDateTime end = now.withHour(16).withMinute(30);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -246,9 +246,9 @@ public class BookingTest {
         void booking_valid_dates(){
 
             // given
-            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(10).withMinute(0), ZoneId.systemDefault());
-            ZonedDateTime end = ZonedDateTime.of(now.withHour(12).withMinute(30), ZoneId.systemDefault());
+            ZonedDateTime now = ZonedDateTime.now(clock).withHour(8);
+            ZonedDateTime start = now.withHour(10).withMinute(0);
+            ZonedDateTime end = now.withHour(12).withMinute(30);
             Booking booking = Booking.builder()
                     .startDateTime(start)
                     .endDateTime(end)
@@ -270,22 +270,22 @@ public class BookingTest {
         );
 
         @Test
-        @DisplayName("Booking does not overlap should not throw")
+        @DisplayName("Booking does not overlap because starts before other ends should not throw")
         void booking_does_not_overlap_should_go_ok() {
 
             //given
-            LocalDateTime now = LocalDateTime.now(clock);
+            ZonedDateTime now = ZonedDateTime.now(clock);
 
-            ZonedDateTime originalStart = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
-            ZonedDateTime originalEnd = ZonedDateTime.of(now.withHour(10), ZoneId.systemDefault());
+            ZonedDateTime originalStart = now.withHour(8);
+            ZonedDateTime originalEnd = now.withHour(10);
 
             Booking original = Booking.builder()
                     .startDateTime(originalStart)
                     .endDateTime(originalEnd)
                     .build();
 
-            ZonedDateTime newStart = ZonedDateTime.of(now.withHour(10), ZoneId.systemDefault());
-            ZonedDateTime newEnd = ZonedDateTime.of(now.withHour(11), ZoneId.systemDefault());
+            ZonedDateTime newStart = now.withHour(10);
+            ZonedDateTime newEnd =now.withHour(11);
 
             Booking newBooking = Booking.builder()
                     .startDateTime(newStart)
@@ -299,22 +299,77 @@ public class BookingTest {
         }
 
         @Test
-        @DisplayName("Booking does overlap should throw exception")
-        void booking_does_overlap_should_throw() {
+        @DisplayName("Booking does not overlap because starts after other ends should not throw")
+        void booking_does_not_overlap_because_starts_after_other_ends_should_go_ok() {
 
-            //given
-            LocalDateTime now = LocalDateTime.now(clock);
+            ZonedDateTime now = ZonedDateTime.now(clock);
 
-            ZonedDateTime originalStart = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
-            ZonedDateTime originalEnd = ZonedDateTime.of(now.withHour(10), ZoneId.systemDefault());
+            ZonedDateTime originalStart = now.withHour(12).withMinute(0);
+            ZonedDateTime originalEnd = now.withHour(14).withMinute(0);
 
             Booking original = Booking.builder()
                     .startDateTime(originalStart)
                     .endDateTime(originalEnd)
                     .build();
 
-            ZonedDateTime newStart = ZonedDateTime.of(now.withHour(9), ZoneId.systemDefault());
-            ZonedDateTime newEnd = ZonedDateTime.of(now.withHour(9).withMinute(30), ZoneId.systemDefault());
+            ZonedDateTime newStart = now.withHour(9).withMinute(0);
+            ZonedDateTime newEnd = now.withHour(11).withMinute(0);
+
+            Booking newBooking = Booking.builder()
+                    .startDateTime(newStart)
+                    .endDateTime(newEnd)
+                    .build();
+
+            assertThatCode(() -> original.validateDoesNotConflictWith(newBooking))
+                    .doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("Booking does overlap start date after should throw exception")
+        void booking_does_overlap_start_date_is_after_should_throw() {
+
+            //given
+            ZonedDateTime now = ZonedDateTime.now(clock);
+
+            ZonedDateTime originalStart = now.withHour(8);
+            ZonedDateTime originalEnd = now.withHour(10);
+
+            Booking original = Booking.builder()
+                    .startDateTime(originalStart)
+                    .endDateTime(originalEnd)
+                    .build();
+
+            ZonedDateTime newStart = now.withHour(9);
+            ZonedDateTime newEnd = now.withHour(9).withMinute(30);
+
+            Booking newBooking = Booking.builder()
+                    .startDateTime(newStart)
+                    .endDateTime(newEnd)
+                    .build();
+
+            //then
+            assertThatThrownBy(() -> original.validateDoesNotConflictWith(newBooking))
+                    .isInstanceOf(BookingConflictException.class);
+
+        }
+
+        @Test
+        @DisplayName("Booking does overlap end date is before should throw exception")
+        void booking_does_overlap_end_date_is_before_should_throw() {
+
+            //given
+            ZonedDateTime now = ZonedDateTime.now(clock);
+
+            ZonedDateTime originalStart = now.withHour(10);
+            ZonedDateTime originalEnd = now.withHour(12);
+
+            Booking original = Booking.builder()
+                    .startDateTime(originalStart)
+                    .endDateTime(originalEnd)
+                    .build();
+
+            ZonedDateTime newStart = now.withHour(9);
+            ZonedDateTime newEnd = now.withHour(11).withMinute(30);
 
             Booking newBooking = Booking.builder()
                     .startDateTime(newStart)

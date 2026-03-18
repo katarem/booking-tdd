@@ -8,6 +8,7 @@ import io.gihtub.katarem.application.usecase.CreateBookingUseCaseImpl;
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.model.Room;
 import io.gihtub.katarem.domain.policy.ProfanityPolicy;
+import io.gihtub.katarem.domain.policy.TolerancePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,13 +32,16 @@ class CreateBookingUseCaseTest {
     BookingOutputPort outputPort;
 
     @Mock
-    ProfanityPolicy profanityPolicy;
-
-    @Mock
     EmployeeQueryPort employeeQueryPort;
 
     @Mock
     RoomQueryPort roomQueryPort;
+
+    @Mock
+    ProfanityPolicy profanityPolicy;
+
+    @Mock
+    TolerancePolicy tolerancePolicy;
 
     final Clock clock = Clock.fixed(
             Instant.parse("2026-03-18T00:00:00Z"),
@@ -46,7 +50,7 @@ class CreateBookingUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        createBookingUseCase = new CreateBookingUseCaseImpl(outputPort, profanityPolicy, employeeQueryPort, roomQueryPort, clock);
+        createBookingUseCase = new CreateBookingUseCaseImpl(profanityPolicy, tolerancePolicy, outputPort, employeeQueryPort, roomQueryPort, clock);
     }
 
     @Test

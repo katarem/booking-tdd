@@ -6,18 +6,20 @@ import io.gihtub.katarem.application.port.output.EmployeeQueryPort;
 import io.gihtub.katarem.application.port.output.RoomQueryPort;
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.policy.ProfanityPolicy;
+import io.gihtub.katarem.domain.policy.TolerancePolicy;
 import io.gihtub.katarem.infraestructure.exception.impl.employee.EmployeeIsNotActiveException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class CreateBookingUseCaseImpl implements CreateBookingUseCase {
 
     private final ProfanityPolicy profanityPolicy;
+    private final TolerancePolicy tolerancePolicy;
 
     private final BookingOutputPort outputPort;
     private final EmployeeQueryPort employeeQueryPort;
@@ -28,7 +30,10 @@ public class CreateBookingUseCaseImpl implements CreateBookingUseCase {
     @Override
     public Booking createBooking(Booking booking) {
 
-        LocalDateTime now = LocalDateTime.now(clock);
+        ZonedDateTime now = ZonedDateTime.now(clock);
+
+        tolerancePolicy.validateBookingStartDateTolerance(booking.getStartDateTime(), now);
+
         booking.validateDates(now);
 
         profanityPolicy.validateContent("title", booking.getTitle());

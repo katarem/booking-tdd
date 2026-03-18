@@ -7,3 +7,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: 'update'
+
+tolerance:
+  booking-start-date:
+    quantity: 10
+    unit: MINUTES

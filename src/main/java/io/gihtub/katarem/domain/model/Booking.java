@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -32,7 +30,8 @@ public class Booking {
     private Integer attendeesCount;
     private ZonedDateTime createdAt;
 
-    public void validateDates(LocalDateTime now) {
+    public void validateDates(ZonedDateTime now) {
+
         if(startDateTime.isAfter(endDateTime))
             throw new InvalidBookingStartDateException();
 
@@ -44,19 +43,15 @@ public class Booking {
             throw new InvalidBookingPeriod();
         }
 
-        if(ChronoUnit.MINUTES.between(startDateTime, now) > 15) {
-            throw new InvalidBookingStartDateException();
-        }
-
         validateDate(startDateTime, now);
         validateDate(endDateTime, now);
 
     }
 
-    private void validateDate(ZonedDateTime date, LocalDateTime now) {
+    private void validateDate(ZonedDateTime date, ZonedDateTime now) {
 
-        ZonedDateTime start = ZonedDateTime.of(now.withHour(8).withMinute(0), ZoneId.systemDefault());
-        ZonedDateTime end = ZonedDateTime.of(now.withHour(20).withMinute(0), ZoneId.systemDefault());
+        ZonedDateTime start = now.withHour(8).withMinute(0);
+        ZonedDateTime end = now.withHour(20).withMinute(0);
 
         if(date.isBefore(start) || date.isAfter(end)){
             throw new InvalidBookingDate();

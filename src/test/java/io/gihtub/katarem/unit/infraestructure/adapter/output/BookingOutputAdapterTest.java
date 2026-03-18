@@ -2,18 +2,22 @@ package io.gihtub.katarem.unit.infraestructure.adapter.output;
 
 import io.gihtub.katarem.application.port.output.BookingOutputPort;
 import io.gihtub.katarem.domain.model.Booking;
+import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.adapter.output.persistence.BookingEntity;
 import io.gihtub.katarem.infraestructure.adapter.output.persistence.BookingJpaOutput;
 import io.gihtub.katarem.infraestructure.adapter.output.persistence.BookingPersistenceAdapter;
 import io.gihtub.katarem.infraestructure.mapper.BookingPersistenceMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,5 +106,64 @@ public class BookingOutputAdapterTest {
         assertThatThrownBy(() -> outputPort.createBooking(booking))
                 .isInstanceOf(RuntimeException.class);
     }
+
+    @Test
+    @DisplayName("Get Bookings by Room Id should return bookings")
+    void get_bookings_should_return() {
+
+        // given
+        Integer roomId = 1;
+        Set<BookingEntity> bookings = Collections.singleton(BookingEntity.builder().roomId(roomId).build());
+
+        // when
+        when(jpaOutput.findAllByRoomIdAndByStatusNot(roomId, BookingStatus.CANCELLED))
+                .thenReturn(bookings);
+
+        // then
+        Set<Booking> result = outputPort.getAllBookingsByRoomId(roomId);
+        assertThat(result)
+                .isNotNull()
+                .isNotEmpty();
+
+    }
+
+    @Test
+    @DisplayName("Get Bookings by Room Id should return empty set")
+    void get_bookings_should_return_empty() {
+
+        // given
+        Integer roomId = 1;
+        Set<BookingEntity> bookings = Collections.singleton(BookingEntity.builder().roomId(roomId).build());
+
+        // when
+        when(jpaOutput.findAllByRoomIdAndByStatusNot(roomId, BookingStatus.CANCELLED))
+                .thenReturn(bookings);
+
+        // then
+        Set<Booking> result = outputPort.getAllBookingsByRoomId(roomId);
+        assertThat(result)
+                .isNotNull()
+                .isNotEmpty();
+
+    }
+
+    @Test
+    @DisplayName("Get Bookings by Room Id should throw exception")
+    void get_bookings_should_throw() {
+
+        // given
+        Integer roomId = 1;
+
+        // when
+        when(jpaOutput.findAllByRoomIdAndByStatusNot(roomId, BookingStatus.CANCELLED))
+                .thenThrow(RuntimeException.class);
+
+        // then
+        assertThatThrownBy(() -> outputPort.getAllBookingsByRoomId(roomId))
+                .isInstanceOf(RuntimeException.class);
+
+    }
+
+
 
 }
