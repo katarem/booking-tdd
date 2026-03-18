@@ -55,7 +55,7 @@ public class BookingApiTest {
                 .thenReturn(returned);
 
         // then
-        mockMvc.perform(get("/api/booking/" + bookingId))
+        mockMvc.perform(get("/api/bookings/" + bookingId))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expected));
     }
@@ -74,7 +74,7 @@ public class BookingApiTest {
                 .thenThrow(new BookingNotFoundException(bookingId));
 
         // then
-        mockMvc.perform(get("/api/booking/" + bookingId))
+        mockMvc.perform(get("/api/bookings/" + bookingId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(expected))
                 .andExpect(jsonPath("$.code").value("BOOKING_NOT_FOUND"))

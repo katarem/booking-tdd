@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/booking")
+@RequestMapping("/api/bookings")
 public class BookingApi {
 
     private final GetBookingUseCase getBookingUseCase;
