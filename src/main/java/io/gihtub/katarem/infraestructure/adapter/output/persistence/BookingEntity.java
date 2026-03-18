@@ -16,6 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

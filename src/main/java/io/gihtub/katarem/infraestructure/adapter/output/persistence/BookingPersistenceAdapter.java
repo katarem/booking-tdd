@@ -21,4 +21,10 @@ public class BookingPersistenceAdapter implements BookingOutputPort {
                 .orElseThrow(RuntimeException::new);
         return mapper.toDomain(entity);
     }
+
+    @Override
+    public Booking createBooking(Booking booking) {
+        var entity = output.save(mapper.toEntity(booking));
+        return mapper.toDomain(entity);
+    }
 }

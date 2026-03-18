@@ -1,9 +1,9 @@
 package io.gihtub.katarem.unit.application;
 
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
+import io.gihtub.katarem.application.port.output.BookingOutputPort;
 import io.gihtub.katarem.application.usecase.GetBookingUseCaseImpl;
 import io.gihtub.katarem.domain.model.Booking;
-import io.gihtub.katarem.infraestructure.adapter.output.persistence.BookingPersistenceAdapter;
 import io.gihtub.katarem.infraestructure.exception.BookingNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,13 +22,13 @@ import static org.mockito.Mockito.when;
 public class GetBookingUseCaseTest {
 
     @Mock
-    BookingPersistenceAdapter adapter;
+    BookingOutputPort outputPort;
 
     GetBookingUseCase getBookingUseCase;
 
     @BeforeEach
     void setUp() {
-        getBookingUseCase = new GetBookingUseCaseImpl(adapter);
+        getBookingUseCase = new GetBookingUseCaseImpl(outputPort);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class GetBookingUseCaseTest {
                 .build();
 
         // when
-        when(adapter.getBooking(bookingId))
+        when(outputPort.getBooking(bookingId))
                 .thenReturn(expected);
 
         // then
@@ -62,7 +62,7 @@ public class GetBookingUseCaseTest {
         UUID bookingId = UUID.randomUUID();
 
         // when
-        when(adapter.getBooking(bookingId))
+        when(outputPort.getBooking(bookingId))
                 .thenThrow(new BookingNotFoundException(bookingId));
 
         // then
