@@ -15,9 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,9 +39,14 @@ class CreateBookingUseCaseTest {
     @Mock
     RoomQueryPort roomQueryPort;
 
+    final Clock clock = Clock.fixed(
+            Instant.parse("2026-03-18T00:00:00Z"),
+            ZoneOffset.UTC
+    );
+
     @BeforeEach
     void setUp() {
-        createBookingUseCase = new CreateBookingUseCaseImpl(outputPort, profanityPolicy, employeeQueryPort, roomQueryPort);
+        createBookingUseCase = new CreateBookingUseCaseImpl(outputPort, profanityPolicy, employeeQueryPort, roomQueryPort, clock);
     }
 
     @Test

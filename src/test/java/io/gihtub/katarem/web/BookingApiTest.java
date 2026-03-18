@@ -7,7 +7,7 @@ import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingApi;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingRequest;
 import io.gihtub.katarem.infraestructure.exception.BookingExceptionHandler;
-import io.gihtub.katarem.infraestructure.exception.BookingNotFoundException;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,7 +81,7 @@ public class BookingApiTest {
         // given
         UUID bookingId = UUID.randomUUID();
 
-        String expected = String.format("Booking %s not found.", bookingId);
+        String expected = String.format("Booking with id %s was not found", bookingId);
 
         // when
         when(getBookingUseCase.getBooking(bookingId))

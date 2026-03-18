@@ -2,6 +2,7 @@ package io.gihtub.katarem.infraestructure.adapter.output.client;
 
 import io.gihtub.katarem.application.port.output.RoomQueryPort;
 import io.gihtub.katarem.domain.model.Room;
+import io.gihtub.katarem.infraestructure.exception.impl.room.RoomNotFoundException;
 import io.gihtub.katarem.infraestructure.mapper.RoomMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ public class RoomOutputAdapter implements RoomQueryPort {
     @Override
     public Room getRoomById(Integer roomId) {
         var dto = client.getRoomById(roomId)
-                .orElseThrow(() -> new RuntimeException("Room " + roomId + " not found."));
+                .orElseThrow(() -> new RoomNotFoundException(roomId));
         return mapper.toDomain(dto);
     }
 }

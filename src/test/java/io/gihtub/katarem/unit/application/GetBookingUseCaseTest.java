@@ -4,7 +4,7 @@ import io.gihtub.katarem.application.port.input.GetBookingUseCase;
 import io.gihtub.katarem.application.port.output.BookingOutputPort;
 import io.gihtub.katarem.application.usecase.GetBookingUseCaseImpl;
 import io.gihtub.katarem.domain.model.Booking;
-import io.gihtub.katarem.infraestructure.exception.BookingNotFoundException;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,7 +68,7 @@ public class GetBookingUseCaseTest {
         // then
         assertThatThrownBy(() -> getBookingUseCase.getBooking(bookingId))
                 .isInstanceOf(BookingNotFoundException.class)
-                .hasMessage("Booking %s not found.", bookingId);
+                .hasMessage("Booking with id %s was not found", bookingId);
 
 
     }

@@ -2,13 +2,16 @@ package io.gihtub.katarem.unit.domain;
 
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.model.Room;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
+import io.gihtub.katarem.infraestructure.exception.impl.room.InvalidCapacityForRoomException;
+import io.gihtub.katarem.infraestructure.exception.impl.room.RoomIsInactiveException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,7 +36,7 @@ public class BookingTest {
 
             // then
             assertThatThrownBy(() -> booking.validateRoom(room))
-                    .isInstanceOf(RuntimeException.class);
+                    .isInstanceOf(InvalidCapacityForRoomException.class);
         }
 
         @Test
@@ -42,8 +45,8 @@ public class BookingTest {
 
             // given
             Room room = Room.builder()
-                    .active(true)
-                    .capacity(5)
+                    .active(false)
+                    .capacity(10)
                     .build();
 
             Booking booking = Booking.builder()
@@ -52,7 +55,7 @@ public class BookingTest {
 
             // then
             assertThatThrownBy(() -> booking.validateRoom(room))
-                    .isInstanceOf(RuntimeException.class);
+                    .isInstanceOf(RoomIsInactiveException.class);
         }
 
         @Test
@@ -98,12 +101,18 @@ public class BookingTest {
 
     @Nested
     class DatesValidation {
+
+        private final Clock clock = Clock.fixed(
+                Instant.parse("2026-03-18T00:00:00Z"),
+                ZoneOffset.UTC
+        );
+
         @Test
         @DisplayName("Create Booking invalid start date time is before it should")
         void booking_invalid_start_date_time_is_before_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
             ZonedDateTime start = ZonedDateTime.of(now.withHour(5), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(12), ZoneId.systemDefault());
             Booking booking = Booking.builder()
@@ -112,8 +121,8 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(booking::validateDates)
-                    .isInstanceOf(RuntimeException.class);
+            assertThatThrownBy(() -> booking.validateDates(now))
+                    .isInstanceOf(InvalidBookingDate.class);
 
         }
 
@@ -122,7 +131,7 @@ public class BookingTest {
         void booking_invalid_start_date_time_is_after_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
             ZonedDateTime start = ZonedDateTime.of(now.withHour(22), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(23), ZoneId.systemDefault());
             Booking booking = Booking.builder()
@@ -131,8 +140,8 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(booking::validateDates)
-                    .isInstanceOf(RuntimeException.class);
+            assertThatThrownBy(() -> booking.validateDates(now))
+                    .isInstanceOf(InvalidBookingDate.class);
 
         }
 
@@ -141,7 +150,7 @@ public class BookingTest {
         void booking_invalid_end_date_time_is_before_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
             ZonedDateTime start = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
             Booking booking = Booking.builder()
@@ -150,8 +159,8 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(booking::validateDates)
-                    .isInstanceOf(RuntimeException.class);
+            assertThatThrownBy(() -> booking.validateDates(now))
+                    .isInstanceOf(InvalidBookingPeriod.class);
 
         }
 
@@ -160,8 +169,8 @@ public class BookingTest {
         void booking_invalid_end_date_time_is_after_it_should(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
-            ZonedDateTime start = ZonedDateTime.of(now.withHour(21), ZoneId.systemDefault());
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
+            ZonedDateTime start = ZonedDateTime.of(now.withHour(19), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(23), ZoneId.systemDefault());
             Booking booking = Booking.builder()
                     .startDateTime(start)
@@ -169,8 +178,8 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(booking::validateDates)
-                    .isInstanceOf(RuntimeException.class);
+            assertThatThrownBy(() -> booking.validateDates(now))
+                    .isInstanceOf(InvalidBookingDate.class);
 
         }
 
@@ -179,7 +188,7 @@ public class BookingTest {
         void booking_invalid_start_date_is_after_end_date(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
             ZonedDateTime start = ZonedDateTime.of(now.withHour(17), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(15), ZoneId.systemDefault());
             Booking booking = Booking.builder()
@@ -188,8 +197,8 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(booking::validateDates)
-                    .isInstanceOf(RuntimeException.class);
+            assertThatThrownBy(() -> booking.validateDates(now))
+                    .isInstanceOf(InvalidBookingStartDateException.class);
 
         }
 
@@ -198,7 +207,7 @@ public class BookingTest {
         void booking_invalid_dates_difference_lower_than_30m(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
             ZonedDateTime start = ZonedDateTime.of(now.withHour(17).withMinute(0), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(17).withMinute(25), ZoneId.systemDefault());
             Booking booking = Booking.builder()
@@ -207,8 +216,8 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(booking::validateDates)
-                    .isInstanceOf(RuntimeException.class);
+            assertThatThrownBy(() -> booking.validateDates(now))
+                    .isInstanceOf(InvalidBookingPeriod.class);
 
         }
 
@@ -217,7 +226,7 @@ public class BookingTest {
         void booking_invalid_dates_difference_higher_than_8h(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
             ZonedDateTime start = ZonedDateTime.of(now.withHour(8).withMinute(0), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(16).withMinute(30), ZoneId.systemDefault());
             Booking booking = Booking.builder()
@@ -226,8 +235,8 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(booking::validateDates)
-                    .isInstanceOf(RuntimeException.class);
+            assertThatThrownBy(() -> booking.validateDates(now))
+                    .isInstanceOf(InvalidBookingPeriod.class);
 
         }
 
@@ -236,7 +245,7 @@ public class BookingTest {
         void booking_valid_dates(){
 
             // given
-            LocalDateTime now = LocalDateTime.now().withHour(8);
+            LocalDateTime now = LocalDateTime.now(clock).withHour(8);
             ZonedDateTime start = ZonedDateTime.of(now.withHour(10).withMinute(0), ZoneId.systemDefault());
             ZonedDateTime end = ZonedDateTime.of(now.withHour(12).withMinute(30), ZoneId.systemDefault());
             Booking booking = Booking.builder()
@@ -245,7 +254,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatCode(booking::validateDates)
+            assertThatCode(() -> booking.validateDates(now))
                     .doesNotThrowAnyException();
 
         }

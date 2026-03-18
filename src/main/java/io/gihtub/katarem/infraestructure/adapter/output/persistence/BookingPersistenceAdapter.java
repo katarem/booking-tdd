@@ -2,6 +2,7 @@ package io.gihtub.katarem.infraestructure.adapter.output.persistence;
 
 import io.gihtub.katarem.application.port.output.BookingOutputPort;
 import io.gihtub.katarem.domain.model.Booking;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
 import io.gihtub.katarem.infraestructure.mapper.BookingPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,7 @@ public class BookingPersistenceAdapter implements BookingOutputPort {
     @Override
     public Booking getBooking(UUID bookingId) {
         var entity = output.findById(bookingId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new BookingNotFoundException(bookingId));
         return mapper.toDomain(entity);
     }
 
