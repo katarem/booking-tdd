@@ -53,4 +53,14 @@ public class Booking {
         }
     }
 
+    public void validateRoom(Room room) {
+        if(!room.isActive()) {
+            throw new RuntimeException();
+        }
+
+        if(this.attendeesCount.compareTo(room.getCapacity()) > 0) {
+            throw new RuntimeException();
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-package io.gihtub.katarem.unit.infraestructure;
+package io.gihtub.katarem.unit.infraestructure.adapter.output;
 
 import io.gihtub.katarem.application.port.output.BookingOutputPort;
 import io.gihtub.katarem.domain.model.Booking;
