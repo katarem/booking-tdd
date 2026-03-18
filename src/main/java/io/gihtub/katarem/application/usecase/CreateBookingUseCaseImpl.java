@@ -17,10 +17,12 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CreateBookingUseCaseImpl implements CreateBookingUseCase {
 
-    private final BookingOutputPort outputPort;
     private final ProfanityPolicy profanityPolicy;
+
+    private final BookingOutputPort outputPort;
     private final EmployeeQueryPort employeeQueryPort;
     private final RoomQueryPort roomQueryPort;
+
     private final Clock clock;
 
     @Override
@@ -38,6 +40,9 @@ public class CreateBookingUseCaseImpl implements CreateBookingUseCase {
 
         var room = roomQueryPort.getRoomById(booking.getRoomId());
         booking.validateRoom(room);
+
+        var bookingsForSameRoom = outputPort.getAllBookingsByRoomId(booking.getRoomId());
+        bookingsForSameRoom.forEach(booking::validateDoesNotConflictWith);
 
         return outputPort.createBooking(booking);
     }

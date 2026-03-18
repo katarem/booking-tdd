@@ -2,6 +2,7 @@ package io.gihtub.katarem.unit.domain;
 
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.model.Room;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConflictException;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
@@ -258,6 +259,75 @@ public class BookingTest {
                     .doesNotThrowAnyException();
 
         }
+    }
+
+    @Nested
+    class BookingConflictValidation {
+
+        private final Clock clock = Clock.fixed(
+                Instant.parse("2026-03-18T00:00:00Z"),
+                ZoneOffset.UTC
+        );
+
+        @Test
+        @DisplayName("Booking does not overlap should not throw")
+        void booking_does_not_overlap_should_go_ok() {
+
+            //given
+            LocalDateTime now = LocalDateTime.now(clock);
+
+            ZonedDateTime originalStart = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
+            ZonedDateTime originalEnd = ZonedDateTime.of(now.withHour(10), ZoneId.systemDefault());
+
+            Booking original = Booking.builder()
+                    .startDateTime(originalStart)
+                    .endDateTime(originalEnd)
+                    .build();
+
+            ZonedDateTime newStart = ZonedDateTime.of(now.withHour(10), ZoneId.systemDefault());
+            ZonedDateTime newEnd = ZonedDateTime.of(now.withHour(11), ZoneId.systemDefault());
+
+            Booking newBooking = Booking.builder()
+                    .startDateTime(newStart)
+                    .endDateTime(newEnd)
+                    .build();
+
+            //then
+            assertThatCode(() -> original.validateDoesNotConflictWith(newBooking))
+                    .doesNotThrowAnyException();
+
+        }
+
+        @Test
+        @DisplayName("Booking does overlap should throw exception")
+        void booking_does_overlap_should_throw() {
+
+            //given
+            LocalDateTime now = LocalDateTime.now(clock);
+
+            ZonedDateTime originalStart = ZonedDateTime.of(now.withHour(8), ZoneId.systemDefault());
+            ZonedDateTime originalEnd = ZonedDateTime.of(now.withHour(10), ZoneId.systemDefault());
+
+            Booking original = Booking.builder()
+                    .startDateTime(originalStart)
+                    .endDateTime(originalEnd)
+                    .build();
+
+            ZonedDateTime newStart = ZonedDateTime.of(now.withHour(9), ZoneId.systemDefault());
+            ZonedDateTime newEnd = ZonedDateTime.of(now.withHour(9).withMinute(30), ZoneId.systemDefault());
+
+            Booking newBooking = Booking.builder()
+                    .startDateTime(newStart)
+                    .endDateTime(newEnd)
+                    .build();
+
+            //then
+            assertThatThrownBy(() -> original.validateDoesNotConflictWith(newBooking))
+                    .isInstanceOf(BookingConflictException.class);
+
+        }
+
+
     }
 
 

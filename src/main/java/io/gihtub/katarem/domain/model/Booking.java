@@ -1,5 +1,6 @@
 package io.gihtub.katarem.domain.model;
 
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConflictException;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
@@ -9,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -20,6 +20,7 @@ import java.util.UUID;
 @Builder
 @Getter
 public class Booking {
+
     private UUID id;
     private Integer employeeId;
     private Integer roomId;
@@ -41,6 +42,10 @@ public class Booking {
 
         if(ChronoUnit.MINUTES.between(startDateTime, endDateTime) > 8 * 60) {
             throw new InvalidBookingPeriod();
+        }
+
+        if(ChronoUnit.MINUTES.between(startDateTime, now) > 15) {
+            throw new InvalidBookingStartDateException();
         }
 
         validateDate(startDateTime, now);
@@ -66,6 +71,12 @@ public class Booking {
         if(this.attendeesCount.compareTo(room.getCapacity()) > 0) {
             throw new InvalidCapacityForRoomException(roomId);
         }
+    }
+
+    public void validateDoesNotConflictWith(Booking other) {
+        if(this.startDateTime.isBefore(other.endDateTime)
+            && this.endDateTime.isAfter(other.startDateTime))
+            throw new BookingConflictException();
     }
 
 }
