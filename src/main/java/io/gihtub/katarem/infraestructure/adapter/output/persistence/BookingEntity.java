@@ -1,10 +1,7 @@
 package io.gihtub.katarem.infraestructure.adapter.output.persistence;
 
 import io.gihtub.katarem.domain.model.BookingStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.ZonedDateTime;
@@ -27,6 +24,8 @@ public class BookingEntity {
     private String description;
     private ZonedDateTime startDateTime;
     private ZonedDateTime endDateTime;
+    @EnumeratedValue
+    @Enumerated(EnumType.STRING)
     private BookingStatus status;
     private Integer attendeesCount;
     private ZonedDateTime createdAt;

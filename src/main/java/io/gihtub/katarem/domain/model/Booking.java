@@ -50,8 +50,8 @@ public class Booking {
 
     private void validateDate(ZonedDateTime date, ZonedDateTime now) {
 
-        ZonedDateTime start = now.withHour(8).withMinute(0);
-        ZonedDateTime end = now.withHour(20).withMinute(0);
+        ZonedDateTime start = date.withHour(8).withMinute(0);
+        ZonedDateTime end = date.withHour(20).withMinute(0);
 
         if(date.isBefore(start) || date.isAfter(end)){
             throw new InvalidBookingDate();

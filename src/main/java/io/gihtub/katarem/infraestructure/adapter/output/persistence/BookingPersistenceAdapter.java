@@ -33,7 +33,7 @@ public class BookingPersistenceAdapter implements BookingOutputPort {
 
     @Override
     public Set<Booking> getAllBookingsByRoomId(Integer roomId) {
-        var entities = output.findAllByRoomIdAndByStatusNot(roomId, BookingStatus.CANCELLED);
+        var entities = output.findAllByRoomIdAndStatusNot(roomId, BookingStatus.CANCELLED);
         return mapper.toDomain(entities);
     }
 }

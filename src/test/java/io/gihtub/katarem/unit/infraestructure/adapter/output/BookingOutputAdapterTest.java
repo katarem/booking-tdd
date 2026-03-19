@@ -116,7 +116,7 @@ public class BookingOutputAdapterTest {
         Set<BookingEntity> bookings = Collections.singleton(BookingEntity.builder().roomId(roomId).build());
 
         // when
-        when(jpaOutput.findAllByRoomIdAndByStatusNot(roomId, BookingStatus.CANCELLED))
+        when(jpaOutput.findAllByRoomIdAndStatusNot(roomId, BookingStatus.CANCELLED))
                 .thenReturn(bookings);
 
         // then
@@ -136,7 +136,7 @@ public class BookingOutputAdapterTest {
         Set<BookingEntity> bookings = Collections.singleton(BookingEntity.builder().roomId(roomId).build());
 
         // when
-        when(jpaOutput.findAllByRoomIdAndByStatusNot(roomId, BookingStatus.CANCELLED))
+        when(jpaOutput.findAllByRoomIdAndStatusNot(roomId, BookingStatus.CANCELLED))
                 .thenReturn(bookings);
 
         // then
@@ -155,7 +155,7 @@ public class BookingOutputAdapterTest {
         Integer roomId = 1;
 
         // when
-        when(jpaOutput.findAllByRoomIdAndByStatusNot(roomId, BookingStatus.CANCELLED))
+        when(jpaOutput.findAllByRoomIdAndStatusNot(roomId, BookingStatus.CANCELLED))
                 .thenThrow(RuntimeException.class);
 
         // then

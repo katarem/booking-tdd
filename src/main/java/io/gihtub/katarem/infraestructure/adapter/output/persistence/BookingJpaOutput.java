@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public interface BookingJpaOutput extends JpaRepository<BookingEntity, UUID> {
 
-    Set<BookingEntity> findAllByRoomIdAndByStatusNot(Integer roomId, BookingStatus status);
+    Set<BookingEntity> findAllByRoomIdAndStatusNot(Integer roomId, BookingStatus status);
 
 }
