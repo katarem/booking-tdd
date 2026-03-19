@@ -26,7 +26,7 @@ public class BookingPersistenceAdapter implements BookingOutputPort {
     }
 
     @Override
-    public Booking createBooking(Booking booking) {
+    public Booking upsertBooking(Booking booking) {
         var entity = output.save(mapper.toEntity(booking));
         return mapper.toDomain(entity);
     }

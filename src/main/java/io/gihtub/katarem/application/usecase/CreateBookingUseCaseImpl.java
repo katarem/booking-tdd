@@ -49,6 +49,6 @@ public class CreateBookingUseCaseImpl implements CreateBookingUseCase {
         var bookingsForSameRoom = outputPort.getAllBookingsByRoomId(booking.getRoomId());
         bookingsForSameRoom.forEach(booking::validateDoesNotConflictWith);
 
-        return outputPort.createBooking(booking);
+        return outputPort.upsertBooking(booking);
     }
 }

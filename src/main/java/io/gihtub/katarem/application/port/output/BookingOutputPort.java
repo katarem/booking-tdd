@@ -7,7 +7,8 @@ import java.util.UUID;
 
 public interface BookingOutputPort {
     Booking getBooking(UUID id);
-    Booking createBooking(Booking booking);
+    Booking upsertBooking(Booking booking);
 
     Set<Booking> getAllBookingsByRoomId(Integer roomId);
+
 }

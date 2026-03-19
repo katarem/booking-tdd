@@ -71,7 +71,7 @@ class CreateBookingUseCaseTest {
                 .build();
 
         // when
-        when(outputPort.createBooking(booking))
+        when(outputPort.upsertBooking(booking))
                 .thenReturn(Booking.builder().id(UUID.randomUUID()).build());
 
         when(employeeQueryPort.existsById(1))
@@ -109,7 +109,7 @@ class CreateBookingUseCaseTest {
         when(roomQueryPort.getRoomById(1))
                 .thenReturn(new Room(1, 10, true));
 
-        when(outputPort.createBooking(booking))
+        when(outputPort.upsertBooking(booking))
                 .thenThrow(RuntimeException.class);
 
         // then

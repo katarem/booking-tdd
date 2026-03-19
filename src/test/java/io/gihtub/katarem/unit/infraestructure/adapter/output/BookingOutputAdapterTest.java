@@ -86,7 +86,7 @@ public class BookingOutputAdapterTest {
                 .thenReturn(BookingEntity.builder().id(UUID.randomUUID()).build());
 
         // then
-        Booking obtained = outputPort.createBooking(booking);
+        Booking obtained = outputPort.upsertBooking(booking);
         assertThat(obtained)
                 .isNotNull()
                 .hasAllNullFieldsOrPropertiesExcept("id");
@@ -103,7 +103,7 @@ public class BookingOutputAdapterTest {
                 .thenThrow(RuntimeException.class);
 
         // then
-        assertThatThrownBy(() -> outputPort.createBooking(booking))
+        assertThatThrownBy(() -> outputPort.upsertBooking(booking))
                 .isInstanceOf(RuntimeException.class);
     }
 
