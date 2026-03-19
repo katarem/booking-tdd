@@ -1,9 +1,6 @@
 package io.gihtub.katarem.domain.model;
 
-import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConflictException;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.*;
 import io.gihtub.katarem.infraestructure.exception.impl.room.InvalidCapacityForRoomException;
 import io.gihtub.katarem.infraestructure.exception.impl.room.RoomIsInactiveException;
 import lombok.AllArgsConstructor;
@@ -75,6 +72,8 @@ public class Booking {
     }
 
     public void confirm() {
-
+        if(!this.status.equals(BookingStatus.PENDING))
+            throw new BookingConfirmationException();
+        this.status = BookingStatus.CONFIRMED;
     }
 }
