@@ -2,9 +2,7 @@ package io.gihtub.katarem.infraestructure.adapter.input.rest;
 
 import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
-import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapper;
-import jakarta.annotation.Nonnull;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
