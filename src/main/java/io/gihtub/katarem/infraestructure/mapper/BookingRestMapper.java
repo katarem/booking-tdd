@@ -2,6 +2,7 @@ package io.gihtub.katarem.infraestructure.mapper;
 
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingRequest;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.ConfirmBookingResponse;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.CreateBookingResponse;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.GetBookingResponse;
 import org.mapstruct.Mapper;
@@ -16,4 +17,5 @@ public interface BookingRestMapper {
 
     CreateBookingResponse toCreateBookingResponse(Booking booking);
 
+    ConfirmBookingResponse toConfirmBookingResponse(Booking booking);
 }

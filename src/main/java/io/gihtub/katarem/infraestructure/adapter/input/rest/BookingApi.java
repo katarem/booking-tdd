@@ -1,5 +1,6 @@
 package io.gihtub.katarem.infraestructure.adapter.input.rest;
 
+import io.gihtub.katarem.application.port.input.ConfirmBookingUseCase;
 import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapper;
@@ -17,6 +18,8 @@ public class BookingApi {
 
     private final GetBookingUseCase getBookingUseCase;
     private final CreateBookingUseCase createBookingUseCase;
+    private final ConfirmBookingUseCase confirmBookingUseCase;
+
     private final BookingRestMapper mapper;
 
     @GetMapping("/{bookingId}")
@@ -32,6 +35,13 @@ public class BookingApi {
         var model = mapper.toDomain(request);
         var booking = createBookingUseCase.createBooking(model);
         return mapper.toCreateBookingResponse(booking);
+    }
+
+    @PatchMapping("/{bookingId}/confirm")
+    @ResponseStatus(HttpStatus.OK)
+    public ConfirmBookingResponse confirmBooking(@PathVariable UUID bookingId) {
+        var booking = confirmBookingUseCase.confirmBooking(bookingId);
+        return mapper.toConfirmBookingResponse(booking);
     }
 
 }

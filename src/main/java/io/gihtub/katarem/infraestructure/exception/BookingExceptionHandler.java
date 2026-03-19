@@ -1,6 +1,7 @@
 package io.gihtub.katarem.infraestructure.exception;
 
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingErrorResponse;
+import io.gihtub.katarem.infraestructure.exception.base.DomainConflictException;
 import io.gihtub.katarem.infraestructure.exception.base.DomainNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class BookingExceptionHandler {
+
+    @ExceptionHandler(DomainConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    BookingErrorResponse handleConflict(DomainConflictException ex) {
+        return BookingErrorResponse.builder()
+                .code(ex.getCode())
+                .message(ex.getMessage())
+                .build();
+    }
 
     @ExceptionHandler(DomainNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
