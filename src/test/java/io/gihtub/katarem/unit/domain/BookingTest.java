@@ -1,11 +1,9 @@
 package io.gihtub.katarem.unit.domain;
 
 import io.gihtub.katarem.domain.model.Booking;
+import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.domain.model.Room;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConflictException;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.*;
 import io.gihtub.katarem.infraestructure.exception.impl.room.InvalidCapacityForRoomException;
 import io.gihtub.katarem.infraestructure.exception.impl.room.RoomIsInactiveException;
 import org.junit.jupiter.api.DisplayName;
@@ -385,5 +383,44 @@ public class BookingTest {
 
     }
 
+    @Nested
+    class ConfirmFeature {
+
+        @Test
+        void confirm_booking_should_be_ok() {
+            // given
+            Booking booking = Booking.builder()
+                    .status(BookingStatus.PENDING)
+                    .build();
+            // then
+            assertThatCode(booking::confirm)
+                    .doesNotThrowAnyException();
+        }
+
+        @Test
+        void confirm_booking_should_fail_on_cancelled() {
+            // given
+            Booking booking = Booking.builder()
+                    .status(BookingStatus.CANCELLED)
+                    .build();
+            // then
+            assertThatThrownBy(booking::confirm)
+                    .isInstanceOf(BookingConfirmationException.class);
+
+        }
+
+        @Test
+        void confirm_booking_should_fail_on_confirmed() {
+            // given
+            Booking booking = Booking.builder()
+                    .status(BookingStatus.CONFIRMED)
+                    .build();
+            // then
+            assertThatThrownBy(booking::confirm)
+                    .isInstanceOf(BookingConfirmationException.class);
+
+        }
+
+    }
 
 }

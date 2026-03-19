@@ -74,4 +74,7 @@ public class Booking {
             throw new BookingConflictException();
     }
 
+    public void confirm() {
+
+    }
 }
