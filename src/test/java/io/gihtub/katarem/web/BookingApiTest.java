@@ -7,7 +7,7 @@ import io.gihtub.katarem.application.port.input.GetBookingUseCase;
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingApi;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingRequest;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
 import io.gihtub.katarem.infraestructure.exception.BookingExceptionHandler;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
@@ -241,7 +241,7 @@ public class BookingApiTest {
                         patch("/api/bookings/" + bookingId + "/cancel")
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(bookingId))
+                .andExpect(jsonPath("$.id").value(bookingId.toString()))
                 .andExpect(jsonPath("$.status").value(BookingStatus.CANCELLED.name()));
     }
 

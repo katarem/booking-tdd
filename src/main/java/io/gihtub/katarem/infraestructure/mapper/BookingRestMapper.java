@@ -1,12 +1,15 @@
 package io.gihtub.katarem.infraestructure.mapper;
 
 import io.gihtub.katarem.domain.model.Booking;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingRequest;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CancelBookingResponse;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.ConfirmBookingResponse;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CreateBookingResponse;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.GetBookingResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
+
+import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BookingRestMapper {
@@ -18,4 +21,6 @@ public interface BookingRestMapper {
     CreateBookingResponse toCreateBookingResponse(Booking booking);
 
     ConfirmBookingResponse toConfirmBookingResponse(Booking booking);
+
+    CancelBookingResponse toCancelBookingResponse(Booking booking);
 }

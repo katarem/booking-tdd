@@ -4,6 +4,7 @@ import io.gihtub.katarem.application.port.input.CancelBookingUseCase;
 import io.gihtub.katarem.application.port.input.ConfirmBookingUseCase;
 import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CancelBookingResponse;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.ConfirmBookingResponse;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CreateBookingResponse;
@@ -54,7 +55,7 @@ public class BookingApi {
     @ResponseStatus(HttpStatus.OK)
     public CancelBookingResponse cancelBooking(@PathVariable UUID bookingId) {
         var booking = cancelBookingUseCase.cancelBooking(bookingId);
-        return null;
+        return mapper.toCancelBookingResponse(booking);
     }
 
 }
