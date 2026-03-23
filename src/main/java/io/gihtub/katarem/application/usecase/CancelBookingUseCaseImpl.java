@@ -15,6 +15,8 @@ public class CancelBookingUseCaseImpl implements CancelBookingUseCase {
     private final BookingOutputPort outputPort;
     @Override
     public Booking cancelBooking(UUID bookingId) {
-        throw new UnsupportedOperationException();
+        Booking booking = outputPort.getBooking(bookingId);
+        booking.cancel();
+        return booking;
     }
 }
