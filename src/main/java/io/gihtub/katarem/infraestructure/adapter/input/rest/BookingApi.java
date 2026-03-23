@@ -1,14 +1,9 @@
 package io.gihtub.katarem.infraestructure.adapter.input.rest;
 
-import io.gihtub.katarem.application.port.input.CancelBookingUseCase;
-import io.gihtub.katarem.application.port.input.ConfirmBookingUseCase;
-import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
-import io.gihtub.katarem.application.port.input.GetBookingUseCase;
+import io.gihtub.katarem.application.port.input.*;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CancelBookingResponse;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.response.ConfirmBookingResponse;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CreateBookingResponse;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.response.GetBookingResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.request.ListBookingsRequest;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.*;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +21,7 @@ public class BookingApi {
     private final CreateBookingUseCase createBookingUseCase;
     private final ConfirmBookingUseCase confirmBookingUseCase;
     private final CancelBookingUseCase cancelBookingUseCase;
+    private final ListBookingUseCase listBookingUseCase;
 
     private final BookingRestMapper mapper;
 
@@ -56,6 +52,12 @@ public class BookingApi {
     public CancelBookingResponse cancelBooking(@PathVariable UUID bookingId) {
         var booking = cancelBookingUseCase.cancelBooking(bookingId);
         return mapper.toCancelBookingResponse(booking);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ListBookingResponse listBookings(@Valid ListBookingsRequest request) {
+        throw new UnsupportedOperationException();
     }
 
 }

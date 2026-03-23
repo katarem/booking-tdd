@@ -1,6 +1,8 @@
 package io.gihtub.katarem.infraestructure.adapter.output.persistence;
 
 import io.gihtub.katarem.application.port.output.BookingOutputPort;
+import io.gihtub.katarem.domain.criteria.BookingCriteria;
+import io.gihtub.katarem.domain.criteria.PageCriteria;
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
@@ -8,6 +10,7 @@ import io.gihtub.katarem.infraestructure.mapper.BookingPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,5 +38,10 @@ public class BookingPersistenceAdapter implements BookingOutputPort {
     public Set<Booking> getAllBookingsByRoomId(Integer roomId) {
         var entities = output.findAllByRoomIdAndStatusNot(roomId, BookingStatus.CANCELLED);
         return mapper.toDomain(entities);
+    }
+
+    @Override
+    public Set<Booking> getBookings(BookingCriteria bookingCriteria, PageCriteria pageCriteria) {
+        throw new UnsupportedOperationException();
     }
 }
