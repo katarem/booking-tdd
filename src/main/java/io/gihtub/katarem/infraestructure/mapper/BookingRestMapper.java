@@ -2,9 +2,9 @@ package io.gihtub.katarem.infraestructure.mapper;
 
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingRequest;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.ConfirmBookingResponse;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.CreateBookingResponse;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.GetBookingResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.ConfirmBookingResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CreateBookingResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.GetBookingResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

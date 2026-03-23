@@ -1,6 +1,6 @@
 package io.gihtub.katarem.infraestructure.exception;
 
-import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingErrorResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.BookingErrorResponse;
 import io.gihtub.katarem.infraestructure.exception.base.DomainConflictException;
 import io.gihtub.katarem.infraestructure.exception.base.DomainNotFoundException;
 import lombok.extern.slf4j.Slf4j;

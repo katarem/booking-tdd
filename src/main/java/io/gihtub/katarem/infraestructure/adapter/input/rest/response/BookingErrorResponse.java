@@ -1,4 +1,4 @@
-package io.gihtub.katarem.infraestructure.adapter.input.rest;
+package io.gihtub.katarem.infraestructure.adapter.input.rest.response;
 
 import lombok.Builder;
 import lombok.Getter;

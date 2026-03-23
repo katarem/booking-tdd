@@ -1,8 +1,13 @@
 package io.gihtub.katarem.infraestructure.adapter.input.rest;
 
+import io.gihtub.katarem.application.port.input.CancelBookingUseCase;
 import io.gihtub.katarem.application.port.input.ConfirmBookingUseCase;
 import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CancelBookingResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.ConfirmBookingResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.CreateBookingResponse;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.response.GetBookingResponse;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +24,7 @@ public class BookingApi {
     private final GetBookingUseCase getBookingUseCase;
     private final CreateBookingUseCase createBookingUseCase;
     private final ConfirmBookingUseCase confirmBookingUseCase;
+    private final CancelBookingUseCase cancelBookingUseCase;
 
     private final BookingRestMapper mapper;
 
@@ -42,6 +48,13 @@ public class BookingApi {
     public ConfirmBookingResponse confirmBooking(@PathVariable UUID bookingId) {
         var booking = confirmBookingUseCase.confirmBooking(bookingId);
         return mapper.toConfirmBookingResponse(booking);
+    }
+
+    @PatchMapping("/{bookingId}/cancel")
+    @ResponseStatus(HttpStatus.OK)
+    public CancelBookingResponse cancelBooking(@PathVariable UUID bookingId) {
+        var booking = cancelBookingUseCase.cancelBooking(bookingId);
+        return null;
     }
 
 }

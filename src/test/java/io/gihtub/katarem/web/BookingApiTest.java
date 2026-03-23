@@ -1,5 +1,6 @@
 package io.gihtub.katarem.web;
 
+import io.gihtub.katarem.application.port.input.CancelBookingUseCase;
 import io.gihtub.katarem.application.port.input.ConfirmBookingUseCase;
 import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
@@ -8,6 +9,7 @@ import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingApi;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingRequest;
 import io.gihtub.katarem.infraestructure.exception.BookingExceptionHandler;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapperImpl;
@@ -47,6 +49,9 @@ public class BookingApiTest {
 
     @MockitoBean
     ConfirmBookingUseCase confirmBookingUseCase;
+
+    @MockitoBean
+    CancelBookingUseCase cancelBookingUseCase;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -218,6 +223,40 @@ public class BookingApiTest {
         // then
         mockMvc.perform(
                         patch("/api/bookings/" + bookingId + "/confirm")
+                )
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void cancel_booking_goes_ok() throws Exception {
+        // given
+        UUID bookingId = UUID.randomUUID();
+
+        // when
+        when(cancelBookingUseCase.cancelBooking(bookingId))
+                .thenReturn(Booking.builder().id(bookingId).status(BookingStatus.CANCELLED).build());
+
+        // then
+        mockMvc.perform(
+                        patch("/api/bookings/" + bookingId + "/cancel")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(bookingId))
+                .andExpect(jsonPath("$.status").value(BookingStatus.CANCELLED.name()));
+    }
+
+    @Test
+    void cancel_booking_has_wrong_state() throws Exception {
+        // given
+        UUID bookingId = UUID.randomUUID();
+
+        // when
+        when(cancelBookingUseCase.cancelBooking(bookingId))
+                .thenThrow(BookingCancellationException.class);
+
+        // then
+        mockMvc.perform(
+                        patch("/api/bookings/" + bookingId + "/cancel")
                 )
                 .andExpect(status().isConflict());
     }
