@@ -76,4 +76,11 @@ public class Booking {
             throw new BookingConfirmationException();
         this.status = BookingStatus.CONFIRMED;
     }
+
+    public void cancel() {
+        if(!this.status.equals(BookingStatus.PENDING))
+            throw new BookingCancellationException();
+        this.status = BookingStatus.CANCELLED;
+    }
+
 }

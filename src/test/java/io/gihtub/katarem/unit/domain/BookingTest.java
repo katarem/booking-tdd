@@ -3,7 +3,12 @@ package io.gihtub.katarem.unit.domain;
 import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.domain.model.Room;
-import io.gihtub.katarem.infraestructure.exception.impl.booking.*;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConflictException;
+import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
 import io.gihtub.katarem.infraestructure.exception.impl.room.InvalidCapacityForRoomException;
 import io.gihtub.katarem.infraestructure.exception.impl.room.RoomIsInactiveException;
 import org.junit.jupiter.api.DisplayName;
@@ -420,6 +425,45 @@ public class BookingTest {
                     .isInstanceOf(BookingConfirmationException.class);
 
         }
+
+    }
+
+    @Nested
+    class CancelFeature {
+
+        @Test
+        void cancel_booking_goes_ok(){
+            // given
+            Booking booking = Booking.builder()
+                    .status(BookingStatus.PENDING)
+                    .build();
+            // then
+            assertThatCode(booking::cancel)
+                    .doesNotThrowAnyException();
+        }
+
+        @Test
+        void cancel_booking_cancelled_throws(){
+            // given
+            Booking booking = Booking.builder()
+                    .status(BookingStatus.CANCELLED)
+                    .build();
+            // then
+            assertThatThrownBy(booking::cancel)
+                    .isInstanceOf(BookingCancellationException.class);
+        }
+
+        @Test
+        void cancel_booking_confirmed_throws(){
+            // given
+            Booking booking = Booking.builder()
+                    .status(BookingStatus.CONFIRMED)
+                    .build();
+            // then
+            assertThatThrownBy(booking::cancel)
+                    .isInstanceOf(BookingCancellationException.class);
+        }
+
 
     }
 
