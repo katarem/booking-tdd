@@ -1,4 +1,4 @@
-package io.gihtub.katarem.infraestructure.adapter.input.rest;
+package io.gihtub.katarem.infraestructure.adapter.input.rest.request;
 
 import io.gihtub.katarem.domain.model.BookingStatus;
 import jakarta.validation.constraints.Min;
