@@ -2,7 +2,7 @@ package io.github.katarem.unit.domain.policy;
 
 import io.github.katarem.domain.policy.TolerancePolicy;
 import io.github.katarem.domain.policy.settings.TolerancePolicySettings;
-import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
+import io.github.katarem.domain.exception.impl.booking.InvalidBookingStartDateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

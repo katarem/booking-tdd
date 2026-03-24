@@ -1,7 +1,7 @@
 package io.github.katarem.domain.policy;
 
 import io.github.katarem.domain.policy.settings.TolerancePolicySettings;
-import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
+import io.github.katarem.domain.exception.impl.booking.InvalidBookingStartDateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

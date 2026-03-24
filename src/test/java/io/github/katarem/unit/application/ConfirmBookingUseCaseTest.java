@@ -5,7 +5,7 @@ import io.github.katarem.application.port.output.BookingOutputPort;
 import io.github.katarem.application.usecase.ConfirmBookingUseCaseImpl;
 import io.github.katarem.domain.model.Booking;
 import io.github.katarem.domain.model.BookingStatus;
-import io.github.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
+import io.github.katarem.domain.exception.impl.booking.BookingConfirmationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

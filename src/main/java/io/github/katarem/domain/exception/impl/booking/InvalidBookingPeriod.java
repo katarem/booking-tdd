@@ -1,6 +1,6 @@
-package io.github.katarem.infraestructure.exception.impl.booking;
+package io.github.katarem.domain.exception.impl.booking;
 
-import io.github.katarem.infraestructure.exception.base.DomainBusinessException;
+import io.github.katarem.domain.exception.base.DomainBusinessException;
 
 public class InvalidBookingPeriod extends DomainBusinessException {
   public InvalidBookingPeriod() {

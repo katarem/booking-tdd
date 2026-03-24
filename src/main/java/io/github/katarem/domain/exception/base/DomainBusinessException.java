@@ -1,4 +1,4 @@
-package io.github.katarem.infraestructure.exception.base;
+package io.github.katarem.domain.exception.base;
 
 public abstract class DomainBusinessException extends DomainBaseException {
     public DomainBusinessException(String modelName, String message) {

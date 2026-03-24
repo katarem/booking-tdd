@@ -2,7 +2,7 @@ package io.github.katarem.infraestructure.adapter.output.client;
 
 import io.github.katarem.application.port.output.RoomQueryPort;
 import io.github.katarem.domain.model.Room;
-import io.github.katarem.infraestructure.exception.impl.room.RoomNotFoundException;
+import io.github.katarem.domain.exception.impl.room.RoomNotFoundException;
 import io.github.katarem.infraestructure.mapper.RoomMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -6,7 +6,7 @@ import io.github.katarem.domain.criteria.PageCriteria;
 import io.github.katarem.domain.model.Booking;
 import io.github.katarem.domain.model.BookingList;
 import io.github.katarem.domain.model.BookingStatus;
-import io.github.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
+import io.github.katarem.domain.exception.impl.booking.BookingNotFoundException;
 import io.github.katarem.infraestructure.mapper.BookingPersistenceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

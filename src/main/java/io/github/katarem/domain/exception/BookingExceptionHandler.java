@@ -1,8 +1,8 @@
-package io.github.katarem.infraestructure.exception;
+package io.github.katarem.domain.exception;
 
 import io.github.katarem.infraestructure.adapter.input.rest.response.BookingErrorResponse;
-import io.github.katarem.infraestructure.exception.base.DomainConflictException;
-import io.github.katarem.infraestructure.exception.base.DomainNotFoundException;
+import io.github.katarem.domain.exception.base.DomainConflictException;
+import io.github.katarem.domain.exception.base.DomainNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;

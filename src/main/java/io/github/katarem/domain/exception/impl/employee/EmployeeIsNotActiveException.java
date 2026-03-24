@@ -1,6 +1,6 @@
-package io.github.katarem.infraestructure.exception.impl.employee;
+package io.github.katarem.domain.exception.impl.employee;
 
-import io.github.katarem.infraestructure.exception.base.DomainBusinessException;
+import io.github.katarem.domain.exception.base.DomainBusinessException;
 
 public class EmployeeIsNotActiveException extends DomainBusinessException {
     public EmployeeIsNotActiveException(Integer id) {

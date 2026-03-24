@@ -7,7 +7,7 @@ import io.github.katarem.application.port.output.RoomQueryPort;
 import io.github.katarem.domain.model.Booking;
 import io.github.katarem.domain.policy.ProfanityPolicy;
 import io.github.katarem.domain.policy.TolerancePolicy;
-import io.github.katarem.infraestructure.exception.impl.employee.EmployeeIsNotActiveException;
+import io.github.katarem.domain.exception.impl.employee.EmployeeIsNotActiveException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

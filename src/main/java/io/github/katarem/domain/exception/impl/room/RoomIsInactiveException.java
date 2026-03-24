@@ -1,6 +1,6 @@
-package io.github.katarem.infraestructure.exception.impl.room;
+package io.github.katarem.domain.exception.impl.room;
 
-import io.github.katarem.infraestructure.exception.base.DomainBusinessException;
+import io.github.katarem.domain.exception.base.DomainBusinessException;
 
 public class RoomIsInactiveException extends DomainBusinessException {
 

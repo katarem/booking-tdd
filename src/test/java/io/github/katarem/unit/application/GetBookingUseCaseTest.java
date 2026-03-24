@@ -4,7 +4,7 @@ import io.github.katarem.application.port.input.GetBookingUseCase;
 import io.github.katarem.application.port.output.BookingOutputPort;
 import io.github.katarem.application.usecase.GetBookingUseCaseImpl;
 import io.github.katarem.domain.model.Booking;
-import io.github.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
+import io.github.katarem.domain.exception.impl.booking.BookingNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

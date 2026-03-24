@@ -1,4 +1,4 @@
-package io.github.katarem.infraestructure.exception.base;
+package io.github.katarem.domain.exception.base;
 
 public abstract class DomainNotFoundException extends DomainBaseException {
     public DomainNotFoundException(String modelName, String id) {

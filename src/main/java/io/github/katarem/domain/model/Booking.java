@@ -1,14 +1,14 @@
 package io.github.katarem.domain.model;
 
-import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
-import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationTimeExpiredException;
-import io.github.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
-import io.github.katarem.infraestructure.exception.impl.booking.BookingConflictException;
-import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
-import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
-import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
-import io.github.katarem.infraestructure.exception.impl.room.InvalidCapacityForRoomException;
-import io.github.katarem.infraestructure.exception.impl.room.RoomIsInactiveException;
+import io.github.katarem.domain.exception.impl.booking.BookingCancellationException;
+import io.github.katarem.domain.exception.impl.booking.BookingCancellationTimeExpiredException;
+import io.github.katarem.domain.exception.impl.booking.BookingConfirmationException;
+import io.github.katarem.domain.exception.impl.booking.BookingConflictException;
+import io.github.katarem.domain.exception.impl.booking.InvalidBookingDate;
+import io.github.katarem.domain.exception.impl.booking.InvalidBookingPeriod;
+import io.github.katarem.domain.exception.impl.booking.InvalidBookingStartDateException;
+import io.github.katarem.domain.exception.impl.room.InvalidCapacityForRoomException;
+import io.github.katarem.domain.exception.impl.room.RoomIsInactiveException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
