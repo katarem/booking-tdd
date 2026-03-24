@@ -1,0 +1,233 @@
+{
+  "info": {
+    "name": "Booking TDD API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Automated coverage for all booking endpoints"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const now = new Date();",
+          "const start = new Date(now.getTime() + 60 * 60 * 1000);",
+          "const end = new Date(start.getTime() + 60 * 60 * 1000);",
+          "pm.collectionVariables.set('startDateTime', start.toISOString());",
+          "pm.collectionVariables.set('endDateTime', end.toISOString());"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "employeeId",
+      "value": "1"
+    },
+    {
+      "key": "roomId",
+      "value": "1"
+    },
+    {
+      "key": "title",
+      "value": "Sprint planning"
+    },
+    {
+      "key": "description",
+      "value": "Sprint planning meeting"
+    },
+    {
+      "key": "attendeesCount",
+      "value": "4"
+    },
+    {
+      "key": "bookingId",
+      "value": ""
+    },
+    {
+      "key": "startDateTime",
+      "value": ""
+    },
+    {
+      "key": "endDateTime",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Create booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"employeeId\": {{employeeId}},\n  \"roomId\": {{roomId}},\n  \"title\": \"{{title}}\",\n  \"description\": \"{{description}}\",\n  \"startDateTime\": \"{{startDateTime}}\",\n  \"endDateTime\": \"{{endDateTime}}\",\n  \"attendeesCount\": {{attendeesCount}}\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/bookings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bookings"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+              "const json = pm.response.json();",
+              "pm.test('Response contains booking id', function () { pm.expect(json.id).to.exist; });",
+              "pm.collectionVariables.set('bookingId', json.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get booking by id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bookings",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.test('Response id matches bookingId', function () { pm.expect(json.id).to.eql(pm.collectionVariables.get('bookingId')); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Confirm booking",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bookings",
+            "{{bookingId}}",
+            "confirm"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.test('Status changed to CONFIRMED', function () { pm.expect(json.status).to.eql('CONFIRMED'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List bookings",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/bookings?page=0&size=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bookings"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.test('Data is an array', function () { pm.expect(Array.isArray(json.data)).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cancel booking",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/bookings/{{bookingId}}/cancel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "bookings",
+            "{{bookingId}}",
+            "cancel"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "const json = pm.response.json();",
+              "pm.test('Status changed to CANCELLED', function () { pm.expect(json.status).to.eql('CANCELLED'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
