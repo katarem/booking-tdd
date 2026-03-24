@@ -12,8 +12,14 @@ public class RoomClient {
     private final List<RoomDto> rooms = List.of(
             new RoomDto(1, 10, true),
             new RoomDto(2, 5, true),
-            new RoomDto(3, 30, true),
-            new RoomDto(4, 3, true)
+            new RoomDto(3, 30, false),
+            new RoomDto(4, 3, true),
+            new RoomDto(5, 3, false),
+            new RoomDto(6, 10, true),
+            new RoomDto(7, 2, true),
+            new RoomDto(8, 4, true),
+            new RoomDto(9, 20, false),
+            new RoomDto(10, 30, true)
     );
 
     public Optional<RoomDto> getRoomById(Integer id) {
