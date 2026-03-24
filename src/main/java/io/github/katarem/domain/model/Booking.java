@@ -1,6 +1,7 @@
 package io.github.katarem.domain.model;
 
 import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
+import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationTimeExpiredException;
 import io.github.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
 import io.github.katarem.infraestructure.exception.impl.booking.BookingConflictException;
 import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
@@ -83,9 +84,11 @@ public class Booking {
         this.status = BookingStatus.CONFIRMED;
     }
 
-    public void cancel() {
-        if(this.status != BookingStatus.PENDING)
+    public void cancel(ZonedDateTime now) {
+        if(this.status == BookingStatus.CANCELLED)
             throw new BookingCancellationException();
+        if(ChronoUnit.MINUTES.between(now, startDateTime) < 15)
+            throw new BookingCancellationTimeExpiredException();
         this.status = BookingStatus.CANCELLED;
     }
 

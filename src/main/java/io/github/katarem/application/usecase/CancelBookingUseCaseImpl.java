@@ -6,6 +6,8 @@ import io.github.katarem.domain.model.Booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Service
@@ -13,10 +15,11 @@ import java.util.UUID;
 public class CancelBookingUseCaseImpl implements CancelBookingUseCase {
 
     private final BookingOutputPort outputPort;
+    private final Clock clock;
     @Override
     public Booking cancelBooking(UUID bookingId) {
         Booking booking = outputPort.getBooking(bookingId);
-        booking.cancel();
+        booking.cancel(ZonedDateTime.now(clock));
         return booking;
     }
 }

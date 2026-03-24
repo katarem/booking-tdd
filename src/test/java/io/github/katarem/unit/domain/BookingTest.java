@@ -4,6 +4,7 @@ import io.github.katarem.domain.model.Booking;
 import io.github.katarem.domain.model.BookingStatus;
 import io.github.katarem.domain.model.Room;
 import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
+import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationTimeExpiredException;
 import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingDate;
 import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingPeriod;
 import io.github.katarem.infraestructure.exception.impl.booking.InvalidBookingStartDateException;
@@ -435,37 +436,49 @@ public class BookingTest {
     @Nested
     class CancelFeature {
 
+        private final Clock clock = Clock.fixed(
+                Instant.parse("2026-03-18T00:00:00Z"),
+                ZoneOffset.UTC
+        );
+
+
         @Test
         void cancel_booking_goes_ok(){
             // given
+            ZonedDateTime now = ZonedDateTime.now(clock);
             Booking booking = Booking.builder()
+                    .startDateTime(now.plusMinutes(30))
                     .status(BookingStatus.PENDING)
                     .build();
             // then
-            assertThatCode(booking::cancel)
+            assertThatCode(() -> booking.cancel(ZonedDateTime.now(clock)))
                     .doesNotThrowAnyException();
         }
 
         @Test
         void cancel_booking_cancelled_throws(){
             // given
+            ZonedDateTime now = ZonedDateTime.now(clock);
             Booking booking = Booking.builder()
+                    .startDateTime(now.plusMinutes(30))
                     .status(BookingStatus.CANCELLED)
                     .build();
             // then
-            assertThatThrownBy(booking::cancel)
+            assertThatThrownBy(() -> booking.cancel(now))
                     .isInstanceOf(BookingCancellationException.class);
         }
 
         @Test
         void cancel_booking_confirmed_throws(){
             // given
+            ZonedDateTime now = ZonedDateTime.now(clock);
             Booking booking = Booking.builder()
+                    .startDateTime(now.plusMinutes(10))
                     .status(BookingStatus.CONFIRMED)
                     .build();
             // then
-            assertThatThrownBy(booking::cancel)
-                    .isInstanceOf(BookingCancellationException.class);
+            assertThatThrownBy(() -> booking.cancel(now))
+                    .isInstanceOf(BookingCancellationTimeExpiredException.class);
         }
 
 

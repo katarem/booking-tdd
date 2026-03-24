@@ -6,12 +6,17 @@ import io.github.katarem.application.usecase.CancelBookingUseCaseImpl;
 import io.github.katarem.domain.model.Booking;
 import io.github.katarem.domain.model.BookingStatus;
 import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
+import io.github.katarem.infraestructure.exception.impl.booking.BookingCancellationTimeExpiredException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,17 +31,25 @@ public class CancelBookingUseCaseTest {
 
     CancelBookingUseCase cancelBookingUseCase;
 
+    private final Clock clock = Clock.fixed(
+            Instant.parse("2026-03-18T00:00:00Z"),
+            ZoneOffset.UTC
+    );
+
+
     @BeforeEach
     void setUp() {
-        cancelBookingUseCase = new CancelBookingUseCaseImpl(bookingOutputPort);
+        cancelBookingUseCase = new CancelBookingUseCaseImpl(bookingOutputPort, clock);
     }
 
     @Test
     void cancel_booking_goes_ok(){
         // given
         UUID bookingId = UUID.randomUUID();
+        ZonedDateTime now = ZonedDateTime.now(clock);
         Booking booking = Booking.builder()
                 .id(bookingId)
+                .startDateTime(now.plusMinutes(30))
                 .status(BookingStatus.PENDING)
                 .build();
         // when
@@ -51,8 +64,10 @@ public class CancelBookingUseCaseTest {
     void cancel_booking_validation_error(){
         // given
         UUID bookingId = UUID.randomUUID();
+        ZonedDateTime now = ZonedDateTime.now(clock);
         Booking booking = Booking.builder()
                 .id(bookingId)
+                .startDateTime(now.plusMinutes(10))
                 .status(BookingStatus.CONFIRMED)
                 .build();
         // when
@@ -60,7 +75,7 @@ public class CancelBookingUseCaseTest {
                 .thenReturn(booking);
         // then
         assertThatThrownBy(() -> cancelBookingUseCase.cancelBooking(bookingId))
-                .isInstanceOf(BookingCancellationException.class);
+                .isInstanceOf(BookingCancellationTimeExpiredException.class);
     }
 
     @Test
