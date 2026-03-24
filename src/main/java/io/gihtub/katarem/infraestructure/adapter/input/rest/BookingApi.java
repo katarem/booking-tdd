@@ -1,16 +1,22 @@
 package io.gihtub.katarem.infraestructure.adapter.input.rest;
 
 import io.gihtub.katarem.application.port.input.*;
+import io.gihtub.katarem.domain.criteria.Direction;
+import io.gihtub.katarem.domain.criteria.OrderCriteria;
+import io.gihtub.katarem.domain.criteria.PageCriteria;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.request.ListBookingsRequest;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.*;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,8 +62,26 @@ public class BookingApi {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ListBookingResponse listBookings(@Valid ListBookingsRequest request) {
-        throw new UnsupportedOperationException();
+    public ListBookingResponse listBookings(@Valid @ModelAttribute ListBookingsRequest request, @PageableDefault Pageable pageable) {
+
+        var pageCriteria = new PageCriteria();
+        pageCriteria.setPage(pageable.getPageNumber());
+        pageCriteria.setSize(pageable.getPageSize());
+
+        var sort = pageable.getSort().stream()
+                        .map(order ->
+                                OrderCriteria.builder()
+                                    .field(order.getProperty())
+                                    .direction(Direction.valueOf(order.getDirection().name()))
+                                    .build()
+                        ).collect(Collectors.toSet());
+
+        pageCriteria.setSort(sort);
+
+        var bookingCriteria = mapper.toCriteria(request);
+
+        var bookingList = listBookingUseCase.listBookings(bookingCriteria, pageCriteria);
+        return mapper.toListBookingResponse(bookingList);
     }
 
 }

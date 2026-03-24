@@ -3,6 +3,7 @@ package io.gihtub.katarem.application.port.output;
 import io.gihtub.katarem.domain.criteria.BookingCriteria;
 import io.gihtub.katarem.domain.criteria.PageCriteria;
 import io.gihtub.katarem.domain.model.Booking;
+import io.gihtub.katarem.domain.model.BookingList;
 import io.gihtub.katarem.domain.model.BookingStatus;
 
 import java.time.ZonedDateTime;
@@ -15,6 +16,6 @@ public interface BookingOutputPort {
 
     Set<Booking> getAllBookingsByRoomId(Integer roomId);
 
-    Set<Booking> getBookings(BookingCriteria bookingCriteria, PageCriteria pageCriteria);
+    BookingList getBookings(BookingCriteria bookingCriteria, PageCriteria pageCriteria);
 
 }

@@ -2,15 +2,20 @@ package io.gihtub.katarem.infraestructure.adapter.output.persistence;
 
 import io.gihtub.katarem.application.port.output.BookingOutputPort;
 import io.gihtub.katarem.domain.criteria.BookingCriteria;
+import io.gihtub.katarem.domain.criteria.Direction;
 import io.gihtub.katarem.domain.criteria.PageCriteria;
 import io.gihtub.katarem.domain.model.Booking;
+import io.gihtub.katarem.domain.model.BookingList;
 import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
 import io.gihtub.katarem.infraestructure.mapper.BookingPersistenceMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -41,7 +46,39 @@ public class BookingPersistenceAdapter implements BookingOutputPort {
     }
 
     @Override
-    public Set<Booking> getBookings(BookingCriteria bookingCriteria, PageCriteria pageCriteria) {
-        throw new UnsupportedOperationException();
+    public BookingList getBookings(BookingCriteria bookingCriteria, PageCriteria pageCriteria) {
+
+        Specification<BookingEntity> specification = Specification.unrestricted();
+
+        if(!Objects.isNull(bookingCriteria.getRoomId())) {
+            specification = specification.and(BookingSpecification.roomIdMatches(bookingCriteria.getEmployeeId()));
+        }
+
+        if(!Objects.isNull(bookingCriteria.getEmployeeId())) {
+            specification = specification.and(BookingSpecification.employeeIdMatches(bookingCriteria.getEmployeeId()));
+        }
+
+        if(!Objects.isNull(bookingCriteria.getDate())) {
+            specification = specification.and(BookingSpecification.dateMatches(bookingCriteria.getDate()));
+        }
+
+        if(!Objects.isNull(bookingCriteria.getStatus())) {
+            specification = specification.and(BookingSpecification.statusMatches(bookingCriteria.getStatus()));
+        }
+
+        var sort = Sort.by(pageCriteria.getSort().stream().map(crit ->
+                new Sort.Order(Sort.Direction.valueOf(crit.getDirection().name()), crit.getField())).toList());
+
+        var pageRequest = PageRequest.of(pageCriteria.getPage(), pageCriteria.getSize(), sort);
+
+        var page = output.findAll(specification, pageRequest);
+
+        return BookingList.builder()
+                .bookings(mapper.toDomain(page.toSet()))
+                .size(page.getSize())
+                .page(page.getNumber())
+                .totalPages(page.getTotalPages())
+                .sort(pageCriteria.getSort())
+                .build();
     }
 }

@@ -4,7 +4,13 @@ import io.gihtub.katarem.application.port.input.CancelBookingUseCase;
 import io.gihtub.katarem.application.port.input.ConfirmBookingUseCase;
 import io.gihtub.katarem.application.port.input.CreateBookingUseCase;
 import io.gihtub.katarem.application.port.input.GetBookingUseCase;
+import io.gihtub.katarem.application.port.input.ListBookingUseCase;
+import io.gihtub.katarem.domain.criteria.BookingCriteria;
+import io.gihtub.katarem.domain.criteria.Direction;
+import io.gihtub.katarem.domain.criteria.OrderCriteria;
+import io.gihtub.katarem.domain.criteria.PageCriteria;
 import io.gihtub.katarem.domain.model.Booking;
+import io.gihtub.katarem.domain.model.BookingList;
 import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingApi;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
@@ -13,6 +19,7 @@ import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingCancellat
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingNotFoundException;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapperImpl;
+import io.gihtub.katarem.infraestructure.mapper.SortingRestMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BookingApi.class)
-@Import({BookingRestMapperImpl.class, BookingExceptionHandler.class})
+@Import({BookingRestMapperImpl.class, SortingRestMapperImpl.class, BookingExceptionHandler.class})
 @AutoConfigureWebMvc
 public class BookingApiTest {
 
@@ -52,6 +60,9 @@ public class BookingApiTest {
 
     @MockitoBean
     CancelBookingUseCase cancelBookingUseCase;
+
+    @MockitoBean
+    ListBookingUseCase listBookingUseCase;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -261,5 +272,144 @@ public class BookingApiTest {
                 .andExpect(status().isConflict());
     }
 
+    @Test
+    void get_bookings_no_filters_goes_ok() throws Exception {
+
+        // given
+        var page = new PageCriteria();
+        page.setSize(10);
+        page.setPage(0);
+        page.setSort(Collections.emptySet());
+
+        // when
+        when(listBookingUseCase.listBookings(new BookingCriteria(), page))
+                .thenReturn(
+                        BookingList.builder()
+                                .bookings(Collections.singleton(Booking.builder().build()))
+                                .page(page.getPage())
+                                .size(page.getSize())
+                                .build()
+                );
+        // then
+        mockMvc.perform(
+                        get("/api/bookings")
+                                .queryParam("page", "0")
+                                .queryParam("size", "10")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data").isNotEmpty());
+    }
+
+    @Test
+    void get_bookings_with_filters_returns_empty() throws Exception {
+
+        // given
+        var page = new PageCriteria();
+        page.setSize(10);
+        page.setPage(0);
+        page.setSort(Collections.emptySet());
+
+        // when
+        when(listBookingUseCase.listBookings(new BookingCriteria(), page))
+                .thenReturn(
+                        BookingList.builder()
+                                .bookings(Collections.emptySet())
+                                .page(page.getPage())
+                                .size(page.getSize())
+                                .build()
+                );
+        // then
+        mockMvc.perform(
+                        get("/api/bookings")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @Test
+    void get_bookings_no_filters_invalid_paging() throws Exception {
+
+        var page = new PageCriteria();
+        page.setSize(10);
+        page.setPage(0);
+        page.setSort(Collections.emptySet());
+
+        //when
+        when(listBookingUseCase.listBookings(new BookingCriteria(), page))
+                .thenReturn(
+                        BookingList.builder()
+                                .bookings(Collections.emptySet())
+                                .page(page.getPage())
+                                .size(page.getSize())
+                                .sort(page.getSort())
+                                .build()
+                );
+
+        // then
+        mockMvc.perform(
+                        get("/api/bookings")
+                                .queryParam("page", "-1")
+                                .queryParam("size", "-1")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.sort").isArray());
+    }
+
+    @Test
+    void get_bookings_no_filters_throws_exception() throws Exception {
+
+        // given
+        var page = new PageCriteria();
+        page.setSize(10);
+        page.setPage(0);
+        page.setSort(Collections.emptySet());
+
+        // when
+        when(listBookingUseCase.listBookings(new BookingCriteria(), page))
+                .thenThrow(RuntimeException.class);
+        // then
+        mockMvc.perform(
+                        get("/api/bookings")
+                                .queryParam("page", "0")
+                                .queryParam("size", "10")
+                )
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void get_bookings_no_filters_different_sort_goes_ok() throws Exception {
+
+        // given
+        var page = new PageCriteria();
+        page.setSize(10);
+        page.setPage(0);
+        page.setSort(Collections.singleton(OrderCriteria.builder().field("name").direction(Direction.DESC).build()));
+
+        // when
+        when(listBookingUseCase.listBookings(new BookingCriteria(), page))
+                .thenReturn(BookingList.builder()
+                        .page(0)
+                        .totalPages(1)
+                        .bookings(Collections.singleton(Booking.builder().build()))
+                        .size(10)
+                        .sort(page.getSort())
+                        .build());
+        // then
+        mockMvc.perform(
+                        get("/api/bookings")
+                                .queryParam("page", "0")
+                                .queryParam("size", "10")
+                                .queryParam("sort", "name,desc")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.sort").isArray())
+                .andExpect(jsonPath("$.sort").isNotEmpty())
+                .andExpect(jsonPath("$.sort[0].field").value("name"))
+                .andExpect(jsonPath("$.sort[0].direction").value("DESC"));
+    }
 
 }

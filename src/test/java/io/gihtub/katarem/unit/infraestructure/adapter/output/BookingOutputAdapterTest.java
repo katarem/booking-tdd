@@ -109,7 +109,7 @@ public class BookingOutputAdapterTest {
 
     @Test
     @DisplayName("Get Bookings by Room Id should return bookings")
-    void get_bookings_should_return() {
+    void get_bookings_by_room_id_should_return() {
 
         // given
         Integer roomId = 1;
@@ -129,7 +129,7 @@ public class BookingOutputAdapterTest {
 
     @Test
     @DisplayName("Get Bookings by Room Id should return empty set")
-    void get_bookings_should_return_empty() {
+    void get_bookings_by_room_id_should_return_empty() {
 
         // given
         Integer roomId = 1;
@@ -149,7 +149,7 @@ public class BookingOutputAdapterTest {
 
     @Test
     @DisplayName("Get Bookings by Room Id should throw exception")
-    void get_bookings_should_throw() {
+    void get_bookings_by_room_id_should_throw() {
 
         // given
         Integer roomId = 1;
@@ -163,7 +163,5 @@ public class BookingOutputAdapterTest {
                 .isInstanceOf(RuntimeException.class);
 
     }
-
-
 
 }
