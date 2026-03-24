@@ -13,7 +13,7 @@ import io.gihtub.katarem.domain.model.Booking;
 import io.gihtub.katarem.domain.model.BookingList;
 import io.gihtub.katarem.domain.model.BookingStatus;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.BookingApi;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.request.CreateBookingRequest;
 import io.gihtub.katarem.infraestructure.exception.BookingExceptionHandler;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingCancellationException;
 import io.gihtub.katarem.infraestructure.exception.impl.booking.BookingConfirmationException;
@@ -183,7 +183,7 @@ public class BookingApiTest {
     void create_booking_throws_validation_error() throws Exception {
 
         // given
-        BookingRequest request = BookingRequest.builder()
+        CreateBookingRequest request = CreateBookingRequest.builder()
                 .title("")
                 .description("Epic description")
                 .startDateTime(ZonedDateTime.now())

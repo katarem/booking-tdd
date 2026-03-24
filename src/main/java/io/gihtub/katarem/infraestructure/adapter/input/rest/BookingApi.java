@@ -4,7 +4,7 @@ import io.gihtub.katarem.application.port.input.*;
 import io.gihtub.katarem.domain.criteria.Direction;
 import io.gihtub.katarem.domain.criteria.OrderCriteria;
 import io.gihtub.katarem.domain.criteria.PageCriteria;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.request.BookingRequest;
+import io.gihtub.katarem.infraestructure.adapter.input.rest.request.CreateBookingRequest;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.request.ListBookingsRequest;
 import io.gihtub.katarem.infraestructure.adapter.input.rest.response.*;
 import io.gihtub.katarem.infraestructure.mapper.BookingRestMapper;
@@ -40,7 +40,7 @@ public class BookingApi {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateBookingResponse createBooking(@Valid @RequestBody BookingRequest request) {
+    public CreateBookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request) {
         var model = mapper.toDomain(request);
         var booking = createBookingUseCase.createBooking(model);
         return mapper.toCreateBookingResponse(booking);

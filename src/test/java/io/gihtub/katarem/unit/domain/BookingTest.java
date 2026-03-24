@@ -125,7 +125,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(() -> booking.validateDates(now))
+            assertThatThrownBy(booking::validateDates)
                     .isInstanceOf(InvalidBookingDate.class);
 
         }
@@ -144,7 +144,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(() -> booking.validateDates(now))
+            assertThatThrownBy(booking::validateDates)
                     .isInstanceOf(InvalidBookingDate.class);
 
         }
@@ -163,7 +163,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(() -> booking.validateDates(now))
+            assertThatThrownBy(booking::validateDates)
                     .isInstanceOf(InvalidBookingPeriod.class);
 
         }
@@ -182,7 +182,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(() -> booking.validateDates(now))
+            assertThatThrownBy(booking::validateDates)
                     .isInstanceOf(InvalidBookingDate.class);
 
         }
@@ -201,7 +201,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(() -> booking.validateDates(now))
+            assertThatThrownBy(booking::validateDates)
                     .isInstanceOf(InvalidBookingStartDateException.class);
 
         }
@@ -220,7 +220,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(() -> booking.validateDates(now))
+            assertThatThrownBy(booking::validateDates)
                     .isInstanceOf(InvalidBookingPeriod.class);
 
         }
@@ -239,7 +239,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatThrownBy(() -> booking.validateDates(now))
+            assertThatThrownBy(booking::validateDates)
                     .isInstanceOf(InvalidBookingPeriod.class);
 
         }
@@ -258,7 +258,7 @@ public class BookingTest {
                     .build();
 
             // then
-            assertThatCode(() -> booking.validateDates(now))
+            assertThatCode(booking::validateDates)
                     .doesNotThrowAnyException();
 
         }

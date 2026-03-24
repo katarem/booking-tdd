@@ -27,7 +27,7 @@ public class Booking {
     private Integer attendeesCount;
     private ZonedDateTime createdAt;
 
-    public void validateDates(ZonedDateTime now) {
+    public void validateDates() {
 
         if(startDateTime.isAfter(endDateTime))
             throw new InvalidBookingStartDateException();
@@ -40,12 +40,12 @@ public class Booking {
             throw new InvalidBookingPeriod();
         }
 
-        validateDate(startDateTime, now);
-        validateDate(endDateTime, now);
+        validateDate(startDateTime);
+        validateDate(endDateTime);
 
     }
 
-    private void validateDate(ZonedDateTime date, ZonedDateTime now) {
+    private void validateDate(ZonedDateTime date) {
 
         ZonedDateTime start = date.withHour(8).withMinute(0);
         ZonedDateTime end = date.withHour(20).withMinute(0);

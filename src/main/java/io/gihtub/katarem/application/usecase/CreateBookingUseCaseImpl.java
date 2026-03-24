@@ -34,7 +34,7 @@ public class CreateBookingUseCaseImpl implements CreateBookingUseCase {
 
         tolerancePolicy.validateBookingStartDateTolerance(booking.getStartDateTime(), now);
 
-        booking.validateDates(now);
+        booking.validateDates();
 
         profanityPolicy.validateContent("title", booking.getTitle());
         profanityPolicy.validateContent("description", booking.getDescription());
