@@ -1,6 +1,5 @@
 package io.github.katarem.infraestructure.adapter.input.rest;
 
-import io.gihtub.katarem.application.port.input.*;
 import io.github.katarem.application.port.input.CancelBookingUseCase;
 import io.github.katarem.application.port.input.ConfirmBookingUseCase;
 import io.github.katarem.application.port.input.CreateBookingUseCase;
@@ -11,7 +10,6 @@ import io.github.katarem.domain.criteria.OrderCriteria;
 import io.github.katarem.domain.criteria.PageCriteria;
 import io.github.katarem.infraestructure.adapter.input.rest.request.CreateBookingRequest;
 import io.github.katarem.infraestructure.adapter.input.rest.request.ListBookingsRequest;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.response.*;
 import io.github.katarem.infraestructure.adapter.input.rest.response.CancelBookingResponse;
 import io.github.katarem.infraestructure.adapter.input.rest.response.ConfirmBookingResponse;
 import io.github.katarem.infraestructure.adapter.input.rest.response.CreateBookingResponse;
@@ -23,7 +21,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 import java.util.stream.Collectors;

@@ -5,7 +5,6 @@ import io.github.katarem.domain.model.Booking;
 import io.github.katarem.domain.model.BookingList;
 import io.github.katarem.infraestructure.adapter.input.rest.request.CreateBookingRequest;
 import io.github.katarem.infraestructure.adapter.input.rest.request.ListBookingsRequest;
-import io.gihtub.katarem.infraestructure.adapter.input.rest.response.*;
 import io.github.katarem.infraestructure.adapter.input.rest.response.CancelBookingResponse;
 import io.github.katarem.infraestructure.adapter.input.rest.response.ConfirmBookingResponse;
 import io.github.katarem.infraestructure.adapter.input.rest.response.CreateBookingResponse;
