@@ -15,6 +15,7 @@ public interface BookingRestMapper {
 
     GetBookingResponse toGetBookingResponse(Booking booking);
 
+    @Mapping(target = "status", expression = "java(io.github.katarem.domain.model.BookingStatus.PENDING)")
     Booking toDomain(CreateBookingRequest request);
 
     BookingCriteria toCriteria(ListBookingsRequest request);
