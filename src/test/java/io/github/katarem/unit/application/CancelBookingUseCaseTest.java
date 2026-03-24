@@ -61,7 +61,7 @@ public class CancelBookingUseCaseTest {
     }
 
     @Test
-    void cancel_booking_validation_error(){
+    void cancel_booking_validation_time_error(){
         // given
         UUID bookingId = UUID.randomUUID();
         ZonedDateTime now = ZonedDateTime.now(clock);
@@ -76,6 +76,24 @@ public class CancelBookingUseCaseTest {
         // then
         assertThatThrownBy(() -> cancelBookingUseCase.cancelBooking(bookingId))
                 .isInstanceOf(BookingCancellationTimeExpiredException.class);
+    }
+
+    @Test
+    void cancel_booking_validation_error(){
+        // given
+        UUID bookingId = UUID.randomUUID();
+        ZonedDateTime now = ZonedDateTime.now(clock);
+        Booking booking = Booking.builder()
+                .id(bookingId)
+                .startDateTime(now.plusMinutes(20))
+                .status(BookingStatus.CANCELLED)
+                .build();
+        // when
+        when(bookingOutputPort.getBooking(bookingId))
+                .thenReturn(booking);
+        // then
+        assertThatThrownBy(() -> cancelBookingUseCase.cancelBooking(bookingId))
+                .isInstanceOf(BookingCancellationException.class);
     }
 
     @Test
