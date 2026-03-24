@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: 'cinema-tdd'
+    name: 'booking-tdd'
   jpa:
     hibernate:
       ddl-auto: 'update'
