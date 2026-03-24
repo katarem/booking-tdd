@@ -190,7 +190,6 @@ public class BookingApiTest {
                 .endDateTime(ZonedDateTime.now())
                 .roomId(1)
                 .employeeId(1)
-                .status(BookingStatus.PENDING)
                 .attendeesCount(1)
                 .build();
 
