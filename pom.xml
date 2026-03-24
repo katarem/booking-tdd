@@ -8,7 +8,7 @@
 		<version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>io.gihtub.katarem</groupId>
+	<groupId>io.github.katarem</groupId>
 	<artifactId>cinema-tdd</artifactId>
 	<version>1.0.0</version>
 	<name/>
